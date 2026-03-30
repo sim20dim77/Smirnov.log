@@ -1,1 +1,14 @@
 <h1>{{h1}}</h1>
+<ul>
+  {% for article in articles %}
+    <li class="article" style="list-style-type: none; display: flex; flex-wrap: wrap;">
+      <div style="padding: 2rem; background-color: burlywood; text-align: center; width: 25%; border-radius: 50px; color: white; margin: 3rem;">
+        <h2>{{ article.name }}</h2>
+        <p>{{ article.text }}</p>
+        <a href="article/{{article.id}}">Подробнее</a>
+      </div>
+      
+    </li>
+    <hr>
+  {% endfor %}
+</ul>
