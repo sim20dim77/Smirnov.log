@@ -4,6 +4,7 @@ from controllers.article_controller import ArticlesController
 
 routes = {
     r'^/article/(\d+)$': [ArticlesController, ArticlesController.view],
+    r'^/article/(\d+)/edit$': [ArticlesController, ArticlesController.edit],
     r'^/articles$': [ArticlesController, ArticlesController.index],
     r'^/home$': [SiteController, SiteController.index],
     r'^/about$': [SiteController, SiteController.about],

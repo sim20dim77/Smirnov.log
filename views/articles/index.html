@@ -1,11 +1,11 @@
 <h1>{{h1}}</h1>
-<ul>
+<ul style=" display: flex;">
   {% for article in articles %}
     <li class="article" style="list-style-type: none; margin: 0;">
-      <div style="padding: 2rem; background-color: burlywood; text-align: center; width: 25%; border-radius: 50px; color: white; margin: 3rem;">
-        <h2>{{ article.name }}</h2>
-        <p>{{ article.text }}</p>
-        <a href="article/{{article.id}}">Подробнее</a>
+      <div style="padding: 2rem; background-color: burlywood; text-align: center; border-radius: 50px; color: white; margin: 3rem;">
+        <h2>{{ article.get_name() }}</h2>
+        <p>{{ article.get_text() }}</p>
+        <a href="article/{{article.get_id()}}">Подробнее</a>
       </div>
       
     </li>
