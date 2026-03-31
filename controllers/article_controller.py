@@ -4,7 +4,7 @@ from models.article import Article
 
 class ArticlesController(Controller):
     def index (self, request, response):
-      articles = Article.find_all(Article)
+      articles = Article.find_all()
       print(articles)
       response.text = self.view.render_html('articles/index.html', 
       {
@@ -14,7 +14,7 @@ class ArticlesController(Controller):
       })
 
     def view(self, request, response, id):
-       article = Article.get_by_id(id, Article)
+       article = Article.get_by_id(id)
        response.text = self.view.render_html('articles/view.html', 
       {
         'title': f'MVC Framework - {article.name}',

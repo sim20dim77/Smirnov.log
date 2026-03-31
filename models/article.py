@@ -1,6 +1,6 @@
-from services.db import Db
+from models.active_record_entity import ActiveRecordEntity
 
-class Article:
+class Article(ActiveRecordEntity):
   __tablename__ = 'table1'
   id = None
   author_id = None
@@ -8,12 +8,7 @@ class Article:
   text = None
   created_at = None
 
-  def find_all(cls):
-    db = Db()
-    return db.query("SELECT * FROM 'table1'", {}, cls)
-    # items = db.query("SELECT * FROM 'table1'")
-    # print(items)
 
-  def get_by_id(id, cls):
-    db = Db()
-    return db.query(f"SELECT * FROM 'table1' WHERE id = {id}", {}, cls)[0]
+  @staticmethod
+  def get_table_name():
+    return 'table1'
