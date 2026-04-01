@@ -42,6 +42,35 @@ class ActiveRecordEntity(metaclass = ABCMeta):
       db.query(sql, columns2values, self.__class__)
       db.connection.commit()
       db.connection.close()
+
+  def insert(self, mappedProperties):
+    filteredProperties = dict(filter(lambda item: item[1] is not None and item[1] != '', mappedProperties.items()))
+    columns = []
+    paramsNames = []
+    params2values = {}
+    for  columnName, value in filteredProperties.items():
+        columns.append('`' + columnName + '`')
+        paramsName = ':'+ columnName
+        paramsNames.append(paramsName)
+        params2values[columnName] = value
+
+    columnsViaSemicolon = ', '.join(columns)
+    paramsNamesViaSemicolon = ', '.join(paramsNames)
+
+    sql = 'INSERT INTO ' + self.__class__.get_table_name() + ' (' + columnsViaSemicolon + ' ) VALUES (' + paramsNamesViaSemicolon + ');'
+    db = Db()
+    db.query(sql, params2values, self.__class__)
+    db.connection.commit()
+    db.connection.close()
+
+
+  def delete(self):
+     db = Db()
+     table = self.__class__.get_table_name()
+     db.query(f'DELETE FROM `{table}` WHERE id = :id', {'id' : self._id})
+     self.id = None
+     db.connection.commit()
+     db.connection.close()
   @classmethod
   def find_all(cls):
     db = Db()

@@ -28,4 +28,4 @@ class Article(ActiveRecordEntity):
 
   @staticmethod
   def get_table_name():
-    return 'table1'
+    return 'articles'

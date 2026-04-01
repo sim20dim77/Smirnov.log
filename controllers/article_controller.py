@@ -1,6 +1,6 @@
 from controllers.controller import Controller
 from models.article import Article
-
+from exceptions import NotFoundException
 
 class ArticlesController(Controller):
     def index (self, request, response):
@@ -16,11 +16,7 @@ class ArticlesController(Controller):
     def view(self, request, response, id):
        article = Article.get_by_id(id)
        if article is None:
-          response.status_code = 404
-          response.text = self.view.render_html('errors/404.html', {
-             'error' : 'Статья не найдена'
-          })
-          return
+          raise NotFoundException('Статья не найдена')
        response.text = self.view.render_html('articles/view.html', 
       {
         'title': f'MVC Framework - {article.get_name()}',
@@ -32,19 +28,35 @@ class ArticlesController(Controller):
     def edit(self, request, response, id):
        article = Article.get_by_id(id)
        if article is None:
-          response.status_code = 404
-          response.text = self.view.render_html('errors/404.html', {
-             'error' : 'Статья не найдена'
-          })
-          return
+          raise NotFoundException('Статья не найдена')
        
        if request.method == 'POST':
-          article.set_name(request.POST['name'])
-          article.set_text(request.POST['text'])
-          article.save()
+         article.set_name(request.POST['name'])
+         article.set_text(request.POST['text'])
+         article.save()
+         response.status_code = 302
+         response.headers = [('Location', f'/article/{article.get_id()}')]
+         return 
+    
        response.text = self.view.render_html('articles/edit.html', 
       {
         'title': f'Редактирование - {article.get_name()}',
         'article' : article
       })
        print(article.get_name(), article.get_text())
+
+    def delete(self, request, response, id):
+       article = Article.get_by_id(id)
+       if article is None:
+          raise NotFoundException('Статья не найдена')
+       article.delete()
+       response.status_code = 302
+       response.headers = [('Location', '/articles')]
+
+    def add(self, request, response):
+      article = Article()
+      article.set_author_id(1)
+      article.set_name('Новая статья')
+      article.set_text('Текст новой статьи')
+      
+      article.save()
