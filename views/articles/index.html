@@ -6,6 +6,7 @@
         <h2>{{ article.get_name() }}</h2>
         <p>{{ article.get_text() }}</p>
         <p>{{ article.get_id() }}</p>
+        <p>Автор: {{ article.get_author().get_nickname() }}</p>
         <a href="article/{{article.get_id()}}">Подробнее</a>
       </div>
       
