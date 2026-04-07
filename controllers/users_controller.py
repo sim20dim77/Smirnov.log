@@ -1,6 +1,7 @@
 from controllers.controller import Controller
 # from models.article import Article
 from models.user import User
+from models.user_auth_service import UserAuthService
 from exceptions import NotFoundException
 from exceptions import InvalidArgumentException
 
@@ -34,9 +35,12 @@ class UsersController(Controller):
          try:
             user = User.sign_in(request.POST)
             if isinstance(user, User):
-               print('login ok')
+              token = UserAuthService.create_token(user)
+              response.set_cookie('token', token, 500, '/', False, httponly = True)
+              response.status_code = 302
+              response.location = '/articles'
               #  response.text = self.view.render_html('users/sign_up_success.html', {})
-               return
+              return
             
          except InvalidArgumentException as e:
             response.text = self.view.render_html('users/sign_in.html', 
