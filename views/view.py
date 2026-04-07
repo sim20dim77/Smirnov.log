@@ -6,7 +6,7 @@ class View:
         self.layout = layout
         self.env = Environment(loader = FileSystemLoader('views'), autoescape = (["html", "xml"]))
 
-    def render_html(self, view_name, vars):
+    def render_html(self, view_name, vars = {}):
         layout_file = f"layouts/{self.layout}.html"
         file_vars = {
             "content": view_name,
