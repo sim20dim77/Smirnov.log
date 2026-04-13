@@ -15,6 +15,7 @@ class User(ActiveRecordEntity):
   _role = None
   _password_hash = None
   _auth_token = None
+  _created_at = None
 
   def get_nickname(self):
     return self._nickname
@@ -28,13 +29,17 @@ class User(ActiveRecordEntity):
     return self._password_hash
   def get_auth_token(self):
     return self._auth_token
-  
+  def get_is_confirmed(self):
+        return self._is_confirmed
+
   def set_nickname(self, nickname):
     self._nickname = nickname
   def set_email(self, email):
     self._email = email
   def set_role(self, role):
     self._role = role
+  def set_created_at(self,created_at):
+    self._created_at = created_at
   # def set_created_at(self, created_at):
   #   self._created_at = created_at
   def refresh_auth_token(self):
@@ -45,6 +50,7 @@ class User(ActiveRecordEntity):
     print(user_data)
     if not user_data['nickname']:
       raise InvalidArgumentException('Не передан логин')
+    
     if re.search(r'^[a-zA-Z0-9]+$', user_data['nickname']) is None:
       raise InvalidArgumentException('Логин может состоять только из символов латиницы и цифр')
     
@@ -61,6 +67,9 @@ class User(ActiveRecordEntity):
     except EmailNotValidError as e:
       raise InvalidArgumentException('email некорректен')
 
+
+    if not user_data['password']:
+            raise InvalidArgumentException('Dont transpert "password"')
     if len(user_data['password']) < 8:
       raise InvalidArgumentException('Пароль должен быть не менее восьми символов.')
 
@@ -82,6 +91,9 @@ class User(ActiveRecordEntity):
     if not user_data['email']:
       raise InvalidArgumentException('Не передан email')
 
+    if re.search(r'^[a-zA-Z0-9]+$', user_data['nickname']) is None:
+            raise InvalidArgumentException('Nah')
+    
     user = User.find_one_by_column('nickname', user_data['nickname'])
     
     if user is None:

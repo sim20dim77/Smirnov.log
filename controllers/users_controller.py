@@ -4,6 +4,7 @@ from models.user import User
 from models.user_auth_service import UserAuthService
 from exceptions import NotFoundException
 from exceptions import InvalidArgumentException
+from models.user_auth_service import UserAuthService
 
 class UsersController(Controller):
     def sign_up (self, request, response):
@@ -56,4 +57,19 @@ class UsersController(Controller):
       {
         'title': 'MVC Framework - вход'
       })
-   
+      
+    def logout(self, request, response):
+        response.set_cookie('token', '', -1, '/')
+        response.status_code = 302
+        response.location = request.referer
+        
+    def index (self, request, response):
+      users = User.find_all()
+      print(users)
+      response.text = self.view.render_html('users/users.html', 
+      {
+        'title': 'MVC Framework - users',
+        'h1' : 'articles on site',
+        'user_data' : request.POST,
+
+      })

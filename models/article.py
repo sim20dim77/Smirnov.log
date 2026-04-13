@@ -26,6 +26,8 @@ class Article(ActiveRecordEntity):
     self._name = name
   def set_text(self, text):
     self._text = text
+  def set_created_at(self,created_at):
+        self._created_at = created_at
   # def set_created_at(self, created_at):
   #   self._created_at = created_at
 

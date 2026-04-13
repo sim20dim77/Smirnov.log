@@ -2,6 +2,7 @@ from controllers.controller import Controller
 from models.article import Article
 from models.user import User
 from exceptions import NotFoundException
+from exceptions import UnauthorizedException
 
 class ArticlesController(Controller):
     def index (self, request, response):
@@ -31,7 +32,11 @@ class ArticlesController(Controller):
     def edit(self, request, response, id):
        article = Article.get_by_id(id)
        if article is None:
-          raise NotFoundException('Статья не найдена')
+            response.status_code = 404
+            response.text = self.view.render_html('errors/404.html', {'error': "статья не найдена"})
+            return
+       if self.user is None:
+            raise UnauthorizedException("Необходимо авторизоваться")
        
        if request.method == 'POST':
          article.set_name(request.POST['name'])

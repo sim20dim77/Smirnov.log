@@ -9,16 +9,12 @@
     <div style="margin-bottom: 2rem;">
       <label for="inputName">Логин: </label>
       <input type="text" id="inputName" name="nickname"
-      {% if user %}
-        value = "{{user.nickname}}"
-      {% endif %}>
+      {% if user_data %} value = "{{ user_data.nickname }}" {% endif %}>
     </div>
     <div style="margin-bottom: 2rem;">
       <label for="inputEmail">Email: </label>
       <input type="email" id="inputEmail" name="email"
-      {% if user %}
-        value = "{{user.email}}"
-      {% endif %}>
+      {% if user_data %} value = "{{ user_data.email }}" {% endif %}>
     </div>
     <div style="margin-bottom: 2rem;">
       <label for="inputPassword">Password: </label>
