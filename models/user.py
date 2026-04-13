@@ -88,11 +88,8 @@ class User(ActiveRecordEntity):
     print(user_data)
     if not user_data['nickname']:
       raise InvalidArgumentException('Не передан логин')
-    if not user_data['email']:
-      raise InvalidArgumentException('Не передан email')
-
-    if re.search(r'^[a-zA-Z0-9]+$', user_data['nickname']) is None:
-            raise InvalidArgumentException('Nah')
+    if not user_data['password']:
+      raise InvalidArgumentException('Не передан пароль')
     
     user = User.find_one_by_column('nickname', user_data['nickname'])
     
