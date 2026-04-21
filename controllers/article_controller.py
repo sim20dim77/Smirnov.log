@@ -5,6 +5,7 @@ from exceptions import NotFoundException
 from exceptions import UnauthorizedException
 from exceptions import InvalidArgumentException
 import cgi 
+import os
 
 class ArticlesController(Controller):
     def index (self, request, response):
@@ -70,8 +71,8 @@ class ArticlesController(Controller):
          try:
             form = cgi.FieldStorage(fp=request.environ['wsgi.input'], environ=request.environ)
             fields = {
-               'name' : form.getvalue['name'],
-               'text' : form.getvalue['text']
+               'name' : form.getvalue('name'),
+               'text' : form.getvalue('text')
             }
             img_file = form['img']
             article = Article.create(fields, img_file, self.user)
@@ -81,10 +82,10 @@ class ArticlesController(Controller):
               return
             
          except InvalidArgumentException as e:
-            response.text = self.view.render_html('users/sign_up.html', 
+            response.text = self.view.render_html('articles/add.html', 
             {
-              'title': 'MVC Framework - регистрация',
-              'user' : request.POST,
+              'title': 'Добавление статьи',
+              'article_data' : fields,
               'error' : e
             })
             return
@@ -93,4 +94,4 @@ class ArticlesController(Controller):
          'title' : 'Добавление статьи'
       })
 
-      
+    

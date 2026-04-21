@@ -20,7 +20,7 @@ class UsersController(Controller):
             response.text = self.view.render_html('users/sign_up.html', 
             {
               'title': 'MVC Framework - регистрация',
-              'user' : request.POST,
+              'user_data' : request.POST,
               'error' : e
             })
             return

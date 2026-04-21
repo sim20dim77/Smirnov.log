@@ -1,5 +1,9 @@
 from models.active_record_entity import ActiveRecordEntity
 from models.user import User
+import os
+from exceptions import InvalidArgumentException
+
+MAX_FILE_SIZE = 5 * 1024 * 1024
 
 class Article(ActiveRecordEntity):
   # __tablename__ = 'table1'
@@ -30,6 +34,65 @@ class Article(ActiveRecordEntity):
         self._created_at = created_at
   # def set_created_at(self, created_at):
   #   self._created_at = created_at
+
+  @staticmethod
+
+  def create(fields, img_file, author):
+
+    if not fields['name']:
+      raise InvalidArgumentException('не передано название статьи')
+
+    if not fields['text']:
+      raise InvalidArgumentException('не передан текст статьи')
+
+    if __class__.check_file_size(img_file, MAX_FILE_SIZE)[0] == False :
+      raise InvalidArgumentException('Слишком большой файл! Должно быть не более 5МБ')
+
+    article = Article()
+    article._name = fields['name']
+    article._text = fields['text']
+    article._author_id = author.get_id()
+
+    if img_file.filename:
+
+      file_path = 'uploads/' + img_file.filename
+      article._img = file_path
+      os.makedirs('/uploads', exist_ok=True)
+      with open(file_path, 'wb') as f:
+        while True:
+          chunk = img_file.file.read(8192) # Читаем файл по частям
+          if not chunk:
+            break
+          f.write(chunk)
+
+    article.save()
+    return article
+
+  @staticmethod
+  def check_file_size(file_item, max_size):
+    total_size = 0
+    chunk_size = 8192 
+    current_pos = file_item.file.tell()
+
+    try:
+      file_item.file.seek(0)
+      while True:
+
+        chunk = file_item.file.read(chunk_size)
+        if not chunk:
+          break
+
+        total_size += len(chunk)
+        if total_size > max_size:
+          break
+    finally:
+
+      file_item.file.seek(current_pos)
+
+    print(total_size)
+    return total_size <= max_size, total_size
+
+          
 
   @staticmethod
   def get_table_name():
